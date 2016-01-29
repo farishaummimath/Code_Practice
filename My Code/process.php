@@ -1,9 +1,8 @@
 <?php
 
-$fname= $_POST['firstname'];
-$lname= $_POST['lastname'];
-
-$email= $_POST['email'];
+$fname= isset($_POST['firstname'])? $_POST['firstname'] : ' ';
+$lname= isset($_POST['lastname'])? $_POST['lastname'] : ' ';
+$email= isset($_POST['email'])? $_POST['email'] : ' ';
 
 //echo "Hello $fname $lname email id received is: $email";
 

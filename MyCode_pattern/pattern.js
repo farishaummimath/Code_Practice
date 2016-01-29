@@ -4,13 +4,16 @@ where we pass the form jquery object to this module. All the functionality relat
   */
 var FormSubmit = (function(){
   var $el;
-   var formData = {
-        'firstname'   : $('input[name=firstname]').val(),
+   
+
+  var onSubmit = function (e) {
+    e.preventDefault();
+
+    var formData = {
+        'firstname'   : $el.find('input[name=firstname]').val(),
         'lastname'    : $('input[name=lastname]').val(),
         'email'       :$('input[name=email]').val(),
     };
-
-  var onSubmit = function () {
     $.ajax({
       type        : 'POST',
       url         : 'process.php',
@@ -27,15 +30,21 @@ var FormSubmit = (function(){
     ;
   };
   
-  var onDone = function(res) {
+  var onDone = function(data) {
     // show response
+
     console.log(data);
+        $("#responsemessage").html(" ");
+
         if (data) {
           // if validation is success , displays message
           $('#responsemessage').append('<p>' + data.message + '</p>');
           $('#responsemessage').append('<div>' + data.firstname + '</div>');
           $('#responsemessage').append('<div>' + data.lastname + '</div>');
           $('#responsemessage').append('<div>' + data.email + '</div>');
+           $('#firstnameerror').html(" ");
+          $('#lastnameerror').html(" ");
+          $('#emailerror').html(" ");
         }
         return false;
 
@@ -43,10 +52,15 @@ var FormSubmit = (function(){
   
   var onFail = function(xhr) {
     // show validation error
+     $('#firstnameerror').html(" ");
+     $('#lastnameerror').html(" ");
+     $('#emailerror').html(" ");
        data = xhr.responseJSON;
+       
 
           if (data.errors.firstname) {
             $('#firstnameerror').html(data.errors.firstname);
+
           }
 
           if (data.errors.lastname) {
@@ -61,6 +75,9 @@ var FormSubmit = (function(){
   
   var onAlways = function() {
     // remove loading here
+          $('#inbox-holder').text(" ");
+
+
 
   };
   
@@ -81,8 +98,14 @@ var FormSubmit = (function(){
 })();
 
 
-$(function()){
+$(function(){
+    console.log("Document Loaded");
+
   FormSubmit.start({
     el: $('form')
   });  
+});
+
+$(function() {
+
 });
